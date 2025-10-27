@@ -9,6 +9,23 @@ A abordagem visa identificar, localizar e classificar corretamente todos os **17
 
 ---
 
+## 🧠 Pipeline de Inferência
+
+A figura abaixo ilustra uma amostra real de VIN:
+
+<img width="1024" height="715" alt="chassi" src="https://github.com/user-attachments/assets/c628cb0c-8fd6-494d-a1e1-1c588151baee" />
+
+O fluxo de execução é o seguinte:
+
+1. **Entrada:** imagem de um veículo contendo o VIN.  
+2. **Pré-processamento:** essa imagem é convertida para escala de cinza, passa por CLAHE, suavização e sharpening.  
+3. **Detecção da ROI:** o YOLOv11 localiza e recorta a região contendo o VIN (acontece na mesma Etapa 2).  
+4. **Detecção de caracteres:** o YOLOv11 detecta as bounding boxes dos caracteres.  
+5. **Classificação e fusão de resultados:** cada caractere detectado é classificado pela ResNet18; em caso de conflito entre os modelos, prevalece a classe com maior confiança.  
+6. **Reconstrução do VIN:** os caracteres são ordenados da esquerda para a direita, gerando o número completo.  
+
+---
+
 ## Estrutura do Pipeline
 
 O pipeline completo é dividido em **três fases principais**, conforme a figura abaixo:
@@ -20,17 +37,12 @@ O pipeline completo é dividido em **três fases principais**, conforme a figura
 - **Modelo:** YOLOv11s (ROI Detector)  
 - **Objetivo:** identificar e recortar automaticamente a área onde o VIN está presente na imagem original.  
 - **Dataset:** composto por amostras positivas (contendo VIN) e negativas (sem VIN) para aumentar a robustez do modelo.  
-- **Resultados:**
-  - Precisão: 0.9512  
-  - Recall: 0.8936  
-  - mAP@0.50: 0.9552  
-  - mAP@0.50-0.95: 0.7077  
-  - Fitness: 0.7325  
-
-Esses resultados indicam que o modelo tem **alta capacidade de localizar corretamente a área do VIN**, com poucas detecções incorretas.
 
 - A Figura abaixo ilustra os resultados obtidos no treinamento do modelo.
 <img width="2400" height="1200" alt="results" src="https://github.com/user-attachments/assets/5cdf7dca-14ea-4105-9766-697aeeab67a7" />
+- Esses resultados indicam que o modelo tem **alta capacidade de localizar corretamente a área do VIN**, com poucas detecções incorretas.
+
+---
 
 - A matriz de confusão abaixo ilustra a capacidade do modelo de reconhecer imagens com VINs e sem VINs.  
 - Curiosamente, os casos negativos não estão sendo mostrados nessa matriz de confusão, mas eles existem e compõem cerca de 20-40% das imagens utilizadas.
@@ -44,9 +56,17 @@ Esses resultados indicam que o modelo tem **alta capacidade de localizar correta
 - **Objetivo:** detectar individualmente cada caractere (0–9, A–Z) dentro da ROI detectada.  
 - O modelo é responsável por gerar bounding boxes correspondentes a cada caractere.  
 - Foi aplicado um processo de **aumento de dados (data augmentation)** para melhorar a generalização do modelo.
+- **Resultados:**
+  - Precisão: 0.9512  
+  - Recall: 0.8936  
+  - mAP@0.50: 0.9552  
+  - mAP@0.50-0.95: 0.7077  
+  - Fitness: 0.7325  
 
 - A Figura abaixo ilustra os valores alcançados pelo modelo modelo de Detecção de Caracteres utilizado.
 <img width="2400" height="1200" alt="results" src="https://github.com/user-attachments/assets/c2d56e41-7e28-4658-ac50-c1a324bdaccc" />
+
+---
 
 - A matriz de confusão abaixo ilustra os valores previstos pelo modelo, perante os valores (caracteres) reais.
 <img width="3000" height="2250" alt="confusion_matrix_normalized" src="https://github.com/user-attachments/assets/6f06eb9b-392f-48a7-97a4-15f95ba60d13" />
@@ -66,23 +86,6 @@ Esses resultados indicam que o modelo tem **alta capacidade de localizar correta
 
 Durante a inferência, caso o YOLO e a ResNet18 **concordem na predição**, a classe é mantida.  
 Se houver **divergência**, é escolhida a classe com **maior grau de confiança**.
-
----
-
-## 🧠 Pipeline de Inferência
-
-A figura abaixo ilustra uma amostra real de VIN:
-
-<img width="1024" height="715" alt="chassi" src="https://github.com/user-attachments/assets/c628cb0c-8fd6-494d-a1e1-1c588151baee" />
-
-O fluxo de execução é o seguinte:
-
-1. **Entrada:** imagem de um veículo contendo o VIN.  
-2. **Detecção da ROI:** o YOLOv11 localiza e recorta a região contendo o VIN.  
-3. **Pré-processamento:** a ROI é convertida para escala de cinza, passa por CLAHE, suavização e sharpening.  
-4. **Detecção de caracteres:** o YOLOv11 detecta as bounding boxes dos caracteres.  
-5. **Classificação e fusão de resultados:** cada caractere detectado é classificado pela ResNet18; em caso de conflito entre os modelos, prevalece a classe com maior confiança.  
-6. **Reconstrução do VIN:** os caracteres são ordenados da esquerda para a direita, gerando o número completo.  
 
 ---
 
