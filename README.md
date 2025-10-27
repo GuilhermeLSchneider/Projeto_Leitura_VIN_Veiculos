@@ -5,14 +5,19 @@
 Este projeto tem como objetivo o **reconhecimento automatizado do Número de Identificação de Veículos (VIN)** a partir de imagens fotográficas reais.  
 O pipeline desenvolvido é composto por **três etapas principais**, utilizando modelos da família **YOLOv11** e uma **Rede Neural ResNet18** para refino de predições.
 
-A abordagem visa identificar, localizar e classificar corretamente todos os **17 caracteres alfanuméricos** que compõem o VIN, mesmo em condições adversas como iluminação irregular, ruídos visuais e diferentes materiais de gravação.
+A abordagem visa identificar, localizar e classificar corretamente todos os **17 caracteres alfanuméricos** que compõem o VIN, mesmo em condições adversas como iluminação irregular, ruídos visuais e diferentes materiais de gravação.  
+
+Os 17 caracteres de um VIN são compostos pelos números de 0 até 9, e dos caracteres de A até Z, excluindo I, O e Q, de acordo com as normas ISO 3779 e NBR 6066.  
+<img width="669" height="125" alt="vin_structure" src="https://github.com/user-attachments/assets/e1218830-9dcc-4d32-9dc9-332fa6e890c5" />
+
+O link abaixo apresenta as variações do WMI presentes em veículos e tem uma maior explicação sobre o VIN em sua totalidade.  
+<https://en.wikipedia.org/wiki/Vehicle_identification_number>
 
 ---
 
 ## 🧠 Pipeline de Inferência
 
-A figura abaixo ilustra uma amostra real de VIN:
-
+A figura abaixo ilustra uma amostra real de VIN (note que os asteriscos presentes nas laterais não fazem parte dos 17 caracteres):
 <img width="1024" height="715" alt="chassi" src="https://github.com/user-attachments/assets/c628cb0c-8fd6-494d-a1e1-1c588151baee" />
 
 O fluxo de execução é o seguinte:
@@ -76,8 +81,8 @@ O pipeline completo é dividido em **três fases principais**, conforme a figura
 ### **3️⃣ Classificação de Caracteres**
 
 - **Modelo:** ResNet18  
-- **Função:** atuar como refinador das predições do YOLO, corrigindo erros de classificação em caracteres visualmente semelhantes (como “O” e “0”, “B” e “8”, “Z” e “2”).  
-- A rede foi treinada sobre um dataset balanceado de caracteres alfanuméricos (0–9, A–Z), atingindo:
+- **Função:** atuar como refinador das predições do YOLO, corrigindo erros de classificação em caracteres visualmente semelhantes (como “X” e “K”, “B” e “8”, “Z” e “2”).  
+- A rede foi treinada sobre um dataset de caracteres alfanuméricos (0–9, A–Z, excluindo I, O e Q), atingindo:
   - Precisão Macro: **97.77%**
 
 - A matriz de confusão abaixo ilustra a capacidade do modelo de reconhecer os caracteres corretamente.
