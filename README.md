@@ -99,17 +99,20 @@ Se houver **divergência**, é escolhida a classe com **maior grau de confiança
 O pipeline completo foi avaliado sobre o conjunto de validação e teste, gerando um relatório detalhado (`vin_results_report.csv`).  
 As métricas indicam **alto desempenho geral** e excelente robustez no reconhecimento completo do VIN.
 
+<img width="687" height="471" alt="taxa_erro_acumulada" src="https://github.com/user-attachments/assets/787031ce-f6a6-4053-8143-c5d47e60ceb4" />
+
 | Métrica | Valor |
 |----------|--------|
-| Precisão (Precision) | 0.9512 |
-| Recall | 0.8936 |
-| mAP@50 | 0.9552 |
-| mAP@50–95 | 0.7077 |
-| Fitness | 0.7325 |
 | Acurácia de leitura completa (0 erros) | 87.5% |
+| ≤1 erros por VIN | 91.5% |
 | ≤2 erros por VIN | 92.7% |
 
-Esses resultados mostram que o sistema é capaz de **ler corretamente a grande maioria dos VINs completos**, mesmo em ambientes com ruído, reflexo e variação de foco.
+Esses resultados mostram que o sistema é capaz de **ler corretamente a grande maioria dos VINs completos**, mesmo em ambientes com ruído, reflexo e variação de foco.  
+
+A Figura abaixo ilustra a frequência de VINs que apresentaram nenhum ou mais que 1 erro de leitura, permitindo analisar aonde estão concentrados os maiores erros do modelo.  
+<img width="790" height="490" alt="distribuicao_erros" src="https://github.com/user-attachments/assets/8d9c1596-77a1-43e6-90bb-be6b93ad7e86" />
+
+---
 
 ## ⚠️ Disclaimer do autor
 - É importante salientar que as bases de dados pré-processadas e prontas para uso não estão adicionados ao projeto no GitHub, 
